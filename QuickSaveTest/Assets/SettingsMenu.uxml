@@ -1,0 +1,34 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="False">
+    <ui:VisualElement style="flex-grow: 1; background-color: rgba(18, 22, 31, 0.95); justify-content: center; align-items: center;">
+        <ui:VisualElement style="width: 380px; padding: 24px; background-color: rgb(35, 42, 56); border-radius: 10px; border-width: 2px; border-color: rgb(70, 85, 115);">
+            
+            <ui:Label text="Quick Save Demo" picking-mode="Ignore" style="font-size: 20px; -unity-font-style: bold; color: white; margin-bottom: 16px; -unity-text-align: middle-center;" />
+            
+            <!-- Spelersnaam (String) -->
+            <ui:Label text="Spelersnaam" picking-mode="Ignore" style="color: white; margin-bottom: 2px; font-size: 11px;" />
+            <ui:TextField name="PlayerNameInput" value="Speler1" style="margin-bottom: 10px; color: black;" />
+
+            <!-- Leeftijd -->
+            <ui:Label text="Leeftijd" picking-mode="Ignore" style="color: white; margin-bottom: 2px; font-size: 11px;" />
+            <ui:TextField name="AgeInput" value="18" style="margin-bottom: 10px; color: black;" />
+
+            <!-- Geluid Aan/Uit -->
+            <ui:Toggle label="Geluid Aan" name="SoundToggle" value="true" style="margin-bottom: 16px; color: white;" />
+            
+            <!-- Knoppen -->
+            <ui:VisualElement style="flex-direction: row; justify-content: space-between; margin-bottom: 10px;">
+                <ui:Button text="Save" name="SaveButton" style="flex-grow: 1; height: 38px; background-color: rgb(46, 160, 67); color: white; -unity-font-style: bold; border-radius: 6px; margin-right: 5px;" />
+                <ui:Button text="Load" name="LoadButton" style="flex-grow: 1; height: 38px; background-color: rgb(56, 132, 255); color: white; -unity-font-style: bold; border-radius: 6px; margin-left: 5px;" />
+            </ui:VisualElement>
+            
+            <ui:Button text="Wis Data" name="ClearButton" style="height: 30px; background-color: rgb(180, 50, 50); color: white; border-radius: 4px; font-size: 11px; margin-bottom: 6px;" />
+
+            <!-- Start Game Knop -->
+            <ui:Button text="Start Game" name="StartButton" style="height: 38px; background-color: rgb(210, 140, 30); color: white; -unity-font-style: bold; border-radius: 6px; font-size: 12px; margin-bottom: 6px;" />
+
+            <!-- Status Label -->
+            <ui:Label text="" name="StatusLabel" picking-mode="Ignore" style="margin-top: 6px; color: rgb(160, 175, 200); font-size: 11px; white-space: normal; -unity-text-align: middle-center;" />
+            
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>
