@@ -41,7 +41,7 @@ public static class SaveSystem
         }
         catch (QuickSaveException e)
         {
-            Debug.LogError($"Opslaan in {slot} mislukt: {e.Message}");
+            Debug.LogError($"Saving to {slot} failed: {e.Message}");
             return false;
         }
     }
@@ -59,7 +59,7 @@ public static class SaveSystem
         }
         catch (QuickSaveException e)
         {
-            Debug.LogWarning($"Slot {slot} kon niet worden gelezen: {e.Message}");
+            Debug.LogWarning($"Slot {slot} could not be read: {e.Message}");
             return null;
         }
     }

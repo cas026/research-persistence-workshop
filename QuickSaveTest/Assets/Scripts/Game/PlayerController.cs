@@ -60,13 +60,13 @@ public class PlayerController : MonoBehaviour
         {
             data.Health = 100f;
             Teleport(_startPosition, Quaternion.identity);
-            GameSession.PendingMessage = "Je bent terug bij het begin";
+            GameSession.PendingMessage = "You are back at the start";
         }
     }
 
     private void Teleport(Vector3 position, Quaternion rotation)
     {
-        // Een actieve CharacterController overschrijft de nieuwe positie.
+        // An active CharacterController overwrites the new position.
         _controller.enabled = false;
         transform.SetPositionAndRotation(position, rotation);
         _controller.enabled = true;

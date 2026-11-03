@@ -27,14 +27,14 @@ public class Door : MonoBehaviour
         if (GameSession.RemoveItem(requiredItem))
         {
             GameSession.MarkCollected(name);
-            GameSession.PendingMessage = "De deur is open";
+            GameSession.PendingMessage = "The door is open";
             GameAudio.PlayBeep();
             gameObject.SetActive(false);
         }
         else if (!_warned)
         {
             _warned = true;
-            GameSession.PendingMessage = $"Je hebt een {requiredItem} nodig";
+            GameSession.PendingMessage = $"You need a {requiredItem}";
         }
     }
 }

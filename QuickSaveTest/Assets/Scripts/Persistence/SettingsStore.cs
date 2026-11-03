@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class GameSettings
 {
-    public string PlayerName = "Speler";
+    public string PlayerName = "Player";
 }
 
 public static class SettingsStore
@@ -34,8 +34,8 @@ public static class SettingsStore
         }
         catch (QuickSaveException e)
         {
-            Debug.LogWarning($"Instellingen konden niet worden gelezen: {e.Message}");
-            // QuickSaveWriter.Create kan een kapot bestand ook niet openen.
+            Debug.LogWarning($"Settings could not be read: {e.Message}");
+            // QuickSaveWriter.Create cannot open a damaged file either.
             QuickSaveWriter.DeleteRoot(Root);
         }
 

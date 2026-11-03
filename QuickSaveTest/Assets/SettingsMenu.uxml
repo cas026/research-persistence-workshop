@@ -3,26 +3,26 @@
     <ui:VisualElement class="screen screen--menu">
 
         <ui:VisualElement name="MainPanel" class="panel">
-            <ui:Label text="Schatzoeker" class="title" />
-            <ui:Button name="ContinueButton" text="Verder spelen" />
-            <ui:Button name="NewGameButton" text="Nieuw spel" />
-            <ui:Button name="LoadButton" text="Spel laden" />
-            <ui:Button name="QuitButton" text="Afsluiten" />
+            <ui:Label text="Treasure Hunter" class="title" />
+            <ui:Button name="ContinueButton" text="Continue" />
+            <ui:Button name="NewGameButton" text="New Game" />
+            <ui:Button name="LoadButton" text="Load Game" />
+            <ui:Button name="QuitButton" text="Quit" />
             <ui:Label name="MessageLabel" class="message" />
         </ui:VisualElement>
 
         <ui:VisualElement name="NewGamePanel" class="panel hidden">
-            <ui:Label text="Nieuw spel" class="title" />
-            <ui:Label text="Hoe heet je?" />
+            <ui:Label text="New Game" class="title" />
+            <ui:Label text="What is your name?" />
             <ui:TextField name="NameInput" />
             <ui:Button name="StartButton" text="Start" />
-            <ui:Button name="NewGameBackButton" text="Terug" />
+            <ui:Button name="NewGameBackButton" text="Back" />
         </ui:VisualElement>
 
         <ui:VisualElement name="LoadPanel" class="panel hidden">
-            <ui:Label text="Spel laden" class="title" />
+            <ui:Label text="Load Game" class="title" />
             <ui:ScrollView name="SlotList" class="slot-list" />
-            <ui:Button name="LoadBackButton" text="Terug" />
+            <ui:Button name="LoadBackButton" text="Back" />
         </ui:VisualElement>
 
     </ui:VisualElement>

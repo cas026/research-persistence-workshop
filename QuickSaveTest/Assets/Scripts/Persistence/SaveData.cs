@@ -4,11 +4,11 @@ using UnityEngine;
 
 public class PlayerData
 {
-    public string Name = "Speler";
+    public string Name = "Player";
     public float Health = 100f;
     public int Coins;
 
-    // Geen Transform: QuickSave kan die wel schrijven maar niet teruglezen.
+    // No Transform: QuickSave can write it but cannot read it back.
     public Vector3 Position;
     public Quaternion Rotation = Quaternion.identity;
 }

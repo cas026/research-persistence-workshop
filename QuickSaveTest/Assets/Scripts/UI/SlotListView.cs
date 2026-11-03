@@ -63,7 +63,7 @@ public class SlotListView
             SaveSystem.Delete(slot);
             Refresh();
         })
-        { text = "Wis" };
+        { text = "Delete" };
         delete.AddToClassList("danger");
         delete.SetEnabled(exists);
         row.Add(delete);
@@ -75,9 +75,9 @@ public class SlotListView
     {
         if (summary != null)
         {
-            return $"{summary.PlayerName} - {summary.Coins} munten - {summary.SavedAt:dd-MM HH:mm:ss}";
+            return $"{summary.PlayerName} - {summary.Coins} coins - {summary.SavedAt:dd-MM HH:mm:ss}";
         }
 
-        return exists ? "Beschadigd bestand" : "Leeg";
+        return exists ? "Damaged file" : "Empty";
     }
 }

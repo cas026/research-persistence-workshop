@@ -53,7 +53,7 @@ public static class GameSession
             return false;
         }
 
-        // LoadScene wacht tot het einde van de frame: de oude scene mag deze data niet meer aanpassen.
+        // LoadScene waits until the end of the frame: the old scene must not change this data anymore.
         _loadedGame = loaded;
         _loadedSlot = slot;
         Time.timeScale = 1f;
@@ -97,7 +97,7 @@ public static class GameSession
             return false;
         }
 
-        PendingMessage = $"{SaveSlots.DisplayName(_loadedSlot)} geladen";
+        PendingMessage = $"{SaveSlots.DisplayName(_loadedSlot)} loaded";
         _loadedSlot = null;
         return true;
     }
