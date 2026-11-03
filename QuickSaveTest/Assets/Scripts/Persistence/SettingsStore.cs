@@ -12,32 +12,15 @@ public static class SettingsStore
 
     public static void Save(GameSettings settings)
     {
-        QuickSaveWriter.Create(Root)
-                       .Write("PlayerName", settings.PlayerName)
-                       .Commit();
+        // TODO 1: schrijf settings.PlayerName weg in Root.
     }
 
     public static GameSettings Load()
     {
         GameSettings settings = new GameSettings();
 
-        if (!QuickSaveReader.RootExists(Root))
-        {
-            return settings;
-        }
-
-        try
-        {
-            QuickSaveReader reader = QuickSaveReader.Create(Root);
-
-            if (reader.TryRead("PlayerName", out string playerName)) settings.PlayerName = playerName;
-        }
-        catch (QuickSaveException e)
-        {
-            Debug.LogWarning($"Instellingen konden niet worden gelezen: {e.Message}");
-            // QuickSaveWriter.Create kan een kapot bestand ook niet openen.
-            QuickSaveWriter.DeleteRoot(Root);
-        }
+        // TODO 1: lees de naam uit Root als dat bestand bestaat.
+        // TODO 5: vang QuickSaveException op, log een waarschuwing en verwijder het kapotte bestand.
 
         return settings;
     }
