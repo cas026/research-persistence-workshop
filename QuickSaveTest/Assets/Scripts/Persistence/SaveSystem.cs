@@ -13,13 +13,13 @@ public static class SaveSystem
 
     public static bool Exists(string slot)
     {
-        // TODO 2: geef terug of RootFor(slot) bestaat.
+        // TODO 2: return whether or not RootFor(slot) exists.
         return false;
     }
 
     public static void Delete(string slot)
     {
-        // TODO 4: verwijder RootFor(slot).
+        // TODO 4: delete RootFor(slot).
     }
 
     public static bool Save(string slot, SaveGame game)
@@ -31,24 +31,24 @@ public static class SaveSystem
             SavedAt = DateTime.Now
         };
 
-        // TODO 2: schrijf game en summary weg in RootFor(slot) met Settings, en geef true terug.
-        // TODO 5: vang QuickSaveException op, log de fout en geef false terug.
+        // TODO 2: write game en summary to RootFor(slot), and return true.
+        // TODO 5: catch QuickSaveException, log the error and return false.
 
         return false;
     }
 
     public static SaveGame Load(string slot)
     {
-        // TODO 3: geef null terug als het slot niet bestaat, en lees anders de game uit RootFor(slot) met Settings.
-        // TODO 5: vang QuickSaveException op, log een waarschuwing en geef null terug.
+        // TODO 3: return null if slot doesn't exist, otherwise read from RootFor(slot) and return the game.
+        // TODO 5: catch QuickSaveException, log a warning and return null.
 
         return null;
     }
 
     public static SlotSummary ReadSummary(string slot)
     {
-        // TODO 4: geef null terug als het slot niet bestaat, en lees anders de summary met Settings.
-        // TODO 5: vang QuickSaveException op en geef null terug.
+        // TODO 4: return null if slot doesn't exist, otherwise read the summary from RootFor(slot).
+        // TODO 5: catch QuickSaveException and return null.
 
         return null;
     }

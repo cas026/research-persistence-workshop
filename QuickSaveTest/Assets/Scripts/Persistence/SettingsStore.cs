@@ -12,15 +12,15 @@ public static class SettingsStore
 
     public static void Save(GameSettings settings)
     {
-        // TODO 1: schrijf settings.PlayerName weg in Root.
+        // TODO 1: write settings.PlayerName to Root.
     }
 
     public static GameSettings Load()
     {
         GameSettings settings = new GameSettings();
 
-        // TODO 1: lees de naam uit Root als dat bestand bestaat.
-        // TODO 5: vang QuickSaveException op, log een waarschuwing en verwijder het kapotte bestand.
+        // TODO 1: read the name from Root if the file exists.
+        // TODO 5: catch QuickSaveException, log a warning and delete the corrupt file.
 
         return settings;
     }
