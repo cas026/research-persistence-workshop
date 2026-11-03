@@ -77,6 +77,15 @@ public abstract class PersistenceTestBase
     }
 }
 
+public class SaveLocationTests
+{
+    [Test]
+    public void PrintSaveFolder()
+    {
+        Debug.Log(Path.Combine(QuickSaveGlobalSettings.StorageLocation, "QuickSave"));
+    }
+}
+
 public class Step1_SettingsTests : PersistenceTestBase
 {
     [Test]
