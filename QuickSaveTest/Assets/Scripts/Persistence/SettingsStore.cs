@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class GameSettings
 {
-    public string PlayerName = "Speler";
+    public string PlayerName = "Player";
 }
 
 public static class SettingsStore
@@ -22,11 +22,11 @@ public static class SettingsStore
         GameSettings settings = new GameSettings();
 
         if (!QuickSaveReader.RootExists(Root)) return settings;
-        
+
         try {
             var reader = QuickSaveReader.Create(Root);
             if (reader.TryRead<string>("pn", out var result)) settings.PlayerName = result;
-        } 
+        }
         catch (QuickSaveException e)
         {
             Debug.LogWarning(e);

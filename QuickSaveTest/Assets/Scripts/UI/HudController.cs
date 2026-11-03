@@ -52,11 +52,11 @@ public class HudController : MonoBehaviour
 
         PlayerData player = GameSession.Current.Player;
         _nameLabel.text = player.Name;
-        _coinsLabel.text = $"Munten: {player.Coins}";
+        _coinsLabel.text = $"Coins: {player.Coins}";
         _healthFill.style.width = Length.Percent(Mathf.Clamp(player.Health, 0f, 100f));
         _inventoryLabel.text = GameSession.Current.Inventory.Count == 0
-            ? "Rugzak: leeg"
-            : "Rugzak: " + string.Join(", ", GameSession.Current.Inventory.Select(i => $"{i.Name} x{i.Amount}"));
+            ? "Backpack: empty"
+            : "Backpack: " + string.Join(", ", GameSession.Current.Inventory.Select(i => $"{i.Name} x{i.Amount}"));
 
         UpdateMessage();
     }
@@ -89,15 +89,15 @@ public class HudController : MonoBehaviour
 
     private void OpenSave()
     {
-        _slotTitle.text = "Opslaan";
-        _slotList.Show(SaveSlots.Manual, "Opslaan", true, SaveToSlot);
+        _slotTitle.text = "Save";
+        _slotList.Show(SaveSlots.Manual, "Save", true, SaveToSlot);
         ShowSlots();
     }
 
     private void OpenLoad()
     {
-        _slotTitle.text = "Laden";
-        _slotList.Show(SaveSlots.All, "Laden", false, LoadFromSlot);
+        _slotTitle.text = "Load";
+        _slotList.Show(SaveSlots.All, "Load", false, LoadFromSlot);
         ShowSlots();
     }
 
@@ -110,8 +110,8 @@ public class HudController : MonoBehaviour
     private void SaveToSlot(string slot)
     {
         GameSession.PendingMessage = GameSession.Save(slot)
-            ? $"Opgeslagen in {SaveSlots.DisplayName(slot)}"
-            : $"Opslaan in {SaveSlots.DisplayName(slot)} is mislukt";
+            ? $"Saved to {SaveSlots.DisplayName(slot)}"
+            : $"Saving to {SaveSlots.DisplayName(slot)} failed";
 
         _slotList.Refresh();
     }
@@ -120,7 +120,7 @@ public class HudController : MonoBehaviour
     {
         if (!GameSession.Load(slot))
         {
-            GameSession.PendingMessage = $"{SaveSlots.DisplayName(slot)} kon niet worden geladen";
+            GameSession.PendingMessage = $"{SaveSlots.DisplayName(slot)} could not be loaded";
         }
     }
 }

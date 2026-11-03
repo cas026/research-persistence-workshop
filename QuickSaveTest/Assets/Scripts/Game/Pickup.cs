@@ -1,6 +1,6 @@
 using UnityEngine;
 
-// De objectnaam is het save-id: hernoemen maakt oude saves ongeldig.
+// The object name is the save ID: renaming it invalidates old saves.
 public class Pickup : MonoBehaviour
 {
     public int coins;
@@ -32,7 +32,7 @@ public class Pickup : MonoBehaviour
         if (!string.IsNullOrEmpty(itemName))
         {
             GameSession.AddItem(itemName);
-            GameSession.PendingMessage = $"{itemName} opgepakt";
+            GameSession.PendingMessage = $"{itemName} picked up";
         }
 
         GameAudio.PlayBeep();

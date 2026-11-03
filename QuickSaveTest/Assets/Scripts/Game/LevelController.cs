@@ -28,14 +28,14 @@ public class LevelController : MonoBehaviour
 
     public void QuickSave()
     {
-        GameSession.PendingMessage = GameSession.Save(SaveSlots.Quick) ? "Quicksave gemaakt" : "Quicksave is mislukt";
+        GameSession.PendingMessage = GameSession.Save(SaveSlots.Quick) ? "Quicksave created" : "Quicksave failed";
     }
 
     public void QuickLoad()
     {
         if (!GameSession.Load(SaveSlots.Quick))
         {
-            GameSession.PendingMessage = "Geen bruikbare quicksave gevonden";
+            GameSession.PendingMessage = "No usable quicksave found";
         }
     }
 
@@ -49,7 +49,7 @@ public class LevelController : MonoBehaviour
 
             if (GameSession.Save(SaveSlots.Auto))
             {
-                GameSession.PendingMessage = "Automatisch opgeslagen";
+                GameSession.PendingMessage = "Autosaved";
             }
         }
     }

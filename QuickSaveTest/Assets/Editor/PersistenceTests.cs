@@ -17,7 +17,7 @@ public abstract class PersistenceTestBase
     [SetUp]
     public void SetUp()
     {
-        // Eigen map, zodat de tests geen echte saves overschrijven.
+        // A separate folder, so the tests don't overwrite real saves.
         _originalLocation = QuickSaveGlobalSettings.StorageLocation;
         _testLocation = Path.Combine(Path.GetTempPath(), Path.GetRandomFileName());
         QuickSaveGlobalSettings.StorageLocation = _testLocation;
@@ -52,8 +52,8 @@ public abstract class PersistenceTestBase
         game.Player.Coins = 7;
         game.Player.Position = new Vector3(1.5f, -2.25f, 300f);
         game.Player.Rotation = Quaternion.Euler(10f, 90f, 20f);
-        game.Inventory.Add(new InventoryItem { Name = "Sleutel", Amount = 2 });
-        game.Inventory.Add(new InventoryItem { Name = "Edelsteen", Amount = 1 });
+        game.Inventory.Add(new InventoryItem { Name = "Key", Amount = 2 });
+        game.Inventory.Add(new InventoryItem { Name = "Gem", Amount = 1 });
         game.CollectedIds.Add("coin_01");
         game.CollectedIds.Add("key_01");
         return game;
@@ -68,11 +68,11 @@ public abstract class PersistenceTestBase
 
     protected static SaveGame SaveAndLoad(SaveGame game, string slot = "slot1")
     {
-        Assert.IsTrue(SaveSystem.Save(slot, game), "Save geeft false terug, kijk in de Console naar de foutmelding.");
+        Assert.IsTrue(SaveSystem.Save(slot, game), "Save returned false, check the Console for the error.");
 
         SaveGame loaded = SaveSystem.Load(slot);
 
-        Assert.IsNotNull(loaded, "Load geeft null terug na een geslaagde Save.");
+        Assert.IsNotNull(loaded, "Load returned null after a successful Save.");
         return loaded;
     }
 }
@@ -91,7 +91,7 @@ public class Step1_SettingsTests : PersistenceTestBase
     [Test]
     public void Load_WithoutFile_ReturnsDefaults()
     {
-        Assert.AreEqual("Speler", SettingsStore.Load().PlayerName);
+        Assert.AreEqual("Player", SettingsStore.Load().PlayerName);
     }
 
     [Test]
@@ -99,7 +99,7 @@ public class Step1_SettingsTests : PersistenceTestBase
     {
         SettingsStore.Save(new GameSettings { PlayerName = "Noor" });
 
-        Assert.IsTrue(File.Exists(SettingsFile), "Geen settings.json gevonden. Roep je Commit() aan?");
+        Assert.IsTrue(File.Exists(SettingsFile), "No settings.json found. Did you call Commit()?");
     }
 
     [Test]
@@ -120,7 +120,7 @@ public class Step1_SettingsTests : PersistenceTestBase
     }
 
     [TestCase("")]
-    [TestCase("Noor \"de Baas\" van Dijk")]
+    [TestCase("Noor \"the Boss\" van Dijk")]
     [TestCase("Zoë, 名前")]
     public void Load_KeepsSpecialCharacters(string name)
     {
@@ -145,7 +145,7 @@ public class Step2_SaveTests : PersistenceTestBase
     {
         SaveSystem.Save("slot1", FullGame());
 
-        Assert.IsTrue(File.Exists(SlotFile("slot1")), "Geen save_slot1.json gevonden. Roep je Commit() aan?");
+        Assert.IsTrue(File.Exists(SlotFile("slot1")), "No save_slot1.json found. Did you call Commit()?");
     }
 
     [Test]
@@ -153,7 +153,7 @@ public class Step2_SaveTests : PersistenceTestBase
     {
         SaveSystem.Save("slot1", FullGame());
 
-        Assert.AreEqual(1, Directory.GetFiles(SaveFolder).Length, "Save hoort één bestand te schrijven.");
+        Assert.AreEqual(1, Directory.GetFiles(SaveFolder).Length, "Save should write one file.");
     }
 
     [TestCaseSource(nameof(AllSlots))]
@@ -181,7 +181,7 @@ public class Step2_SaveTests : PersistenceTestBase
     [Test]
     public void Exists_IsTrueForDamagedFile()
     {
-        WriteFile(SlotFile("slot1"), "{ dit is geen geldige json");
+        WriteFile(SlotFile("slot1"), "{ this is not valid json");
 
         Assert.IsTrue(SaveSystem.Exists("slot1"));
     }
@@ -194,7 +194,7 @@ public class Step3_LoadTests : PersistenceTestBase
     [Test]
     public void Load_IsNullForEmptySlot()
     {
-        Assert.IsNull(SaveSystem.Load("slot1"), "Controleer eerst of het slot bestaat.");
+        Assert.IsNull(SaveSystem.Load("slot1"), "Check first whether the slot exists.");
     }
 
     [Test]
@@ -221,7 +221,7 @@ public class Step3_LoadTests : PersistenceTestBase
         Vector3 expected = FullGame().Player.Position;
         Vector3 actual = SaveAndLoad(FullGame()).Player.Position;
 
-        Assert.Less(Vector3.Distance(expected, actual), 0.001f, $"Verwacht {expected}, maar kreeg {actual}.");
+        Assert.Less(Vector3.Distance(expected, actual), 0.001f, $"Expected {expected}, but got {actual}.");
     }
 
     [Test]
@@ -230,7 +230,7 @@ public class Step3_LoadTests : PersistenceTestBase
         Quaternion expected = FullGame().Player.Rotation;
         Quaternion actual = SaveAndLoad(FullGame()).Player.Rotation;
 
-        Assert.Less(Quaternion.Angle(expected, actual), 0.01f, $"Verwacht {expected}, maar kreeg {actual}.");
+        Assert.Less(Quaternion.Angle(expected, actual), 0.01f, $"Expected {expected}, but got {actual}.");
     }
 
     [Test]
@@ -238,10 +238,10 @@ public class Step3_LoadTests : PersistenceTestBase
     {
         List<InventoryItem> inventory = SaveAndLoad(FullGame()).Inventory;
 
-        Assert.AreEqual(2, inventory.Count, "Aantal items in de inventory klopt niet.");
-        Assert.AreEqual("Sleutel", inventory[0].Name);
+        Assert.AreEqual(2, inventory.Count, "The number of inventory items is wrong.");
+        Assert.AreEqual("Key", inventory[0].Name);
         Assert.AreEqual(2, inventory[0].Amount);
-        Assert.AreEqual("Edelsteen", inventory[1].Name);
+        Assert.AreEqual("Gem", inventory[1].Name);
         Assert.AreEqual(1, inventory[1].Amount);
     }
 
@@ -256,13 +256,13 @@ public class Step3_LoadTests : PersistenceTestBase
     {
         SaveGame loaded = SaveAndLoad(new SaveGame());
 
-        Assert.AreEqual("Speler", loaded.Player.Name);
+        Assert.AreEqual("Player", loaded.Player.Name);
         Assert.AreEqual(100f, loaded.Player.Health, 0.001f);
         Assert.AreEqual(0, loaded.Player.Coins);
         Assert.Less(Quaternion.Angle(Quaternion.identity, loaded.Player.Rotation), 0.01f);
-        Assert.IsNotNull(loaded.Inventory, "Inventory mag geen null zijn, ook niet als de lijst leeg is.");
+        Assert.IsNotNull(loaded.Inventory, "Inventory must not be null, even when the list is empty.");
         Assert.IsEmpty(loaded.Inventory);
-        Assert.IsNotNull(loaded.CollectedIds, "CollectedIds mag geen null zijn, ook niet als de lijst leeg is.");
+        Assert.IsNotNull(loaded.CollectedIds, "CollectedIds must not be null, even when the list is empty.");
         Assert.IsEmpty(loaded.CollectedIds);
     }
 
@@ -270,13 +270,13 @@ public class Step3_LoadTests : PersistenceTestBase
     public void Load_KeepsSpecialCharacters()
     {
         SaveGame game = FullGame();
-        game.Player.Name = "Noor \"de Baas\", Zoë";
-        game.Inventory[0].Name = "Sleutel, groot";
+        game.Player.Name = "Noor \"the Boss\", Zoë";
+        game.Inventory[0].Name = "Key, large";
 
         SaveGame loaded = SaveAndLoad(game);
 
-        Assert.AreEqual("Noor \"de Baas\", Zoë", loaded.Player.Name);
-        Assert.AreEqual("Sleutel, groot", loaded.Inventory[0].Name);
+        Assert.AreEqual("Noor \"the Boss\", Zoë", loaded.Player.Name);
+        Assert.AreEqual("Key, large", loaded.Inventory[0].Name);
     }
 
     [Test]
@@ -291,7 +291,7 @@ public class Step3_LoadTests : PersistenceTestBase
 
         SaveGame second = SaveSystem.Load("slot1");
 
-        Assert.AreEqual(7, second.Player.Coins, "Load hoort uit het bestand te lezen, niet uit een eerder object.");
+        Assert.AreEqual(7, second.Player.Coins, "Load should read from the file, not from an earlier object.");
         Assert.AreEqual(2, second.Inventory.Count);
         Assert.AreEqual(2, second.CollectedIds.Count);
     }
@@ -324,7 +324,7 @@ public class Step3_LoadTests : PersistenceTestBase
 
         SaveGame loaded = SaveAndLoad(updated);
 
-        Assert.IsEmpty(loaded.Inventory, "Items die weg zijn horen niet terug te komen na opnieuw opslaan.");
+        Assert.IsEmpty(loaded.Inventory, "Removed items should not come back after saving again.");
         CollectionAssert.AreEqual(new[] { "key_01" }, loaded.CollectedIds);
     }
 
@@ -357,7 +357,7 @@ public class Step3_LoadTests : PersistenceTestBase
         for (int i = 0; i < SaveSlots.All.Length; i++)
         {
             Assert.AreEqual(i + 1, SaveSystem.Load(SaveSlots.All[i]).Player.Coins,
-                $"Slot {SaveSlots.All[i]} bevat de data van een ander slot.");
+                $"Slot {SaveSlots.All[i]} contains data from another slot.");
         }
     }
 }
@@ -371,7 +371,7 @@ public class Step4_SummaryAndDeleteTests : PersistenceTestBase
 
         SlotSummary summary = SaveSystem.ReadSummary("slot1");
 
-        Assert.IsNotNull(summary, "Geen summary gevonden. Schrijf je die mee in Save?");
+        Assert.IsNotNull(summary, "No summary found. Do you write it in Save?");
         Assert.AreEqual("Noor", summary.PlayerName);
         Assert.AreEqual(7, summary.Coins);
     }
@@ -385,14 +385,14 @@ public class Step4_SummaryAndDeleteTests : PersistenceTestBase
 
         SlotSummary summary = SaveSystem.ReadSummary("slot1");
 
-        Assert.IsNotNull(summary, "Geen summary gevonden. Schrijf je die mee in Save?");
-        Assert.That(summary.SavedAt, Is.InRange(before, after), "SavedAt hoort het moment van opslaan te zijn.");
+        Assert.IsNotNull(summary, "No summary found. Do you write it in Save?");
+        Assert.That(summary.SavedAt, Is.InRange(before, after), "SavedAt should be the moment of saving.");
     }
 
     [Test]
     public void ReadSummary_IsNullForEmptySlot()
     {
-        Assert.IsNull(SaveSystem.ReadSummary("slot1"), "Controleer eerst of het slot bestaat.");
+        Assert.IsNull(SaveSystem.ReadSummary("slot1"), "Check first whether the slot exists.");
     }
 
     [Test]
@@ -407,7 +407,7 @@ public class Step4_SummaryAndDeleteTests : PersistenceTestBase
 
         SlotSummary summary = SaveSystem.ReadSummary("slot1");
 
-        Assert.IsNotNull(summary, "Geen summary gevonden. Schrijf je die mee in Save?");
+        Assert.IsNotNull(summary, "No summary found. Do you write it in Save?");
         Assert.AreEqual("Sam", summary.PlayerName);
         Assert.AreEqual(50, summary.Coins);
     }
@@ -418,7 +418,7 @@ public class Step4_SummaryAndDeleteTests : PersistenceTestBase
         SaveSystem.Save("slot1", GameWithCoins(1));
         SaveSystem.Save("slot2", GameWithCoins(2));
 
-        Assert.IsNotNull(SaveSystem.ReadSummary("slot1"), "Geen summary gevonden. Schrijf je die mee in Save?");
+        Assert.IsNotNull(SaveSystem.ReadSummary("slot1"), "No summary found. Do you write it in Save?");
         Assert.AreEqual(1, SaveSystem.ReadSummary("slot1").Coins);
         Assert.AreEqual(2, SaveSystem.ReadSummary("slot2").Coins);
     }
@@ -452,7 +452,7 @@ public class Step4_SummaryAndDeleteTests : PersistenceTestBase
         SaveSystem.Delete("slot1");
 
         Assert.IsFalse(SaveSystem.Exists("slot1"));
-        Assert.IsFalse(File.Exists(SlotFile("slot1")), "Het bestand staat nog op schijf.");
+        Assert.IsFalse(File.Exists(SlotFile("slot1")), "The file is still on disk.");
         Assert.IsNull(SaveSystem.Load("slot1"));
         Assert.IsNull(SaveSystem.ReadSummary("slot1"));
     }
@@ -486,14 +486,14 @@ public class Step4_SummaryAndDeleteTests : PersistenceTestBase
     [Test]
     public void Settings_AndSaves_DoNotAffectEachOther()
     {
-        SettingsStore.Save(new GameSettings { PlayerName = "Instelling" });
+        SettingsStore.Save(new GameSettings { PlayerName = "Setting" });
         SaveSystem.Save("slot1", FullGame());
         SaveSystem.Delete("slot1");
 
-        Assert.AreEqual("Instelling", SettingsStore.Load().PlayerName);
+        Assert.AreEqual("Setting", SettingsStore.Load().PlayerName);
 
         SaveSystem.Save("slot1", FullGame());
-        SettingsStore.Save(new GameSettings { PlayerName = "Anders" });
+        SettingsStore.Save(new GameSettings { PlayerName = "Other" });
 
         Assert.AreEqual("Noor", SaveSystem.Load("slot1").Player.Name);
     }
@@ -503,47 +503,47 @@ public class Step5_DamagedFileTests : PersistenceTestBase
 {
     private static readonly string[] DamagedContents =
     {
-        "{ dit is geen geldige json",
+        "{ this is not valid json",
         "",
         "null",
         "[1, 2, 3]",
         "{}",
-        "{\"onbekend\":1}"
+        "{\"unknown\":1}"
     };
 
     [Test]
     public void Settings_MissingKey_ReturnsDefaults()
     {
         LogAssert.ignoreFailingMessages = true;
-        WriteFile(SettingsFile, "{\"onbekend\":1}");
+        WriteFile(SettingsFile, "{\"unknown\":1}");
 
         GameSettings settings = null;
         Assert.DoesNotThrow(() => settings = SettingsStore.Load());
 
-        Assert.AreEqual("Speler", settings.PlayerName);
+        Assert.AreEqual("Player", settings.PlayerName);
     }
 
     [Test]
     public void Settings_DamagedFile_ReturnsDefaults()
     {
         LogAssert.ignoreFailingMessages = true;
-        WriteFile(SettingsFile, "{ dit is geen geldige json");
+        WriteFile(SettingsFile, "{ this is not valid json");
 
         GameSettings settings = null;
-        Assert.DoesNotThrow(() => settings = SettingsStore.Load(), "Vang QuickSaveException op bij het lezen.");
+        Assert.DoesNotThrow(() => settings = SettingsStore.Load(), "Catch QuickSaveException when reading.");
 
-        Assert.AreEqual("Speler", settings.PlayerName);
+        Assert.AreEqual("Player", settings.PlayerName);
     }
 
     [Test]
     public void Settings_SaveWorksAfterLoadingDamagedFile()
     {
         LogAssert.ignoreFailingMessages = true;
-        WriteFile(SettingsFile, "{ dit is geen geldige json");
+        WriteFile(SettingsFile, "{ this is not valid json");
         SettingsStore.Load();
 
         Assert.DoesNotThrow(() => SettingsStore.Save(new GameSettings { PlayerName = "Noor" }),
-            "QuickSaveWriter.Create kan een kapot bestand niet openen. Verwijder het bestand als het lezen mislukt.");
+            "QuickSaveWriter.Create cannot open a damaged file. Delete the file when reading fails.");
 
         Assert.AreEqual("Noor", SettingsStore.Load().PlayerName);
     }
@@ -555,7 +555,7 @@ public class Step5_DamagedFileTests : PersistenceTestBase
         WriteFile(SlotFile("slot1"), content);
 
         SaveGame loaded = null;
-        Assert.DoesNotThrow(() => loaded = SaveSystem.Load("slot1"), "Vang QuickSaveException op in Load.");
+        Assert.DoesNotThrow(() => loaded = SaveSystem.Load("slot1"), "Catch QuickSaveException in Load.");
 
         Assert.IsNull(loaded);
     }
@@ -567,7 +567,7 @@ public class Step5_DamagedFileTests : PersistenceTestBase
         WriteFile(SlotFile("slot1"), content);
 
         SlotSummary summary = null;
-        Assert.DoesNotThrow(() => summary = SaveSystem.ReadSummary("slot1"), "Vang QuickSaveException op in ReadSummary.");
+        Assert.DoesNotThrow(() => summary = SaveSystem.ReadSummary("slot1"), "Catch QuickSaveException in ReadSummary.");
 
         Assert.IsNull(summary);
     }
@@ -581,7 +581,7 @@ public class Step5_DamagedFileTests : PersistenceTestBase
         File.WriteAllText(SlotFile("slot1"), content.Substring(0, content.Length / 2));
 
         SaveGame loaded = null;
-        Assert.DoesNotThrow(() => loaded = SaveSystem.Load("slot1"), "Vang QuickSaveException op in Load.");
+        Assert.DoesNotThrow(() => loaded = SaveSystem.Load("slot1"), "Catch QuickSaveException in Load.");
 
         Assert.IsNull(loaded);
     }
@@ -591,10 +591,10 @@ public class Step5_DamagedFileTests : PersistenceTestBase
     {
         LogAssert.ignoreFailingMessages = true;
         SaveSystem.Save("slot2", GameWithCoins(2));
-        WriteFile(SlotFile("slot1"), "{ dit is geen geldige json");
+        WriteFile(SlotFile("slot1"), "{ this is not valid json");
 
         SaveGame loaded = null;
-        Assert.DoesNotThrow(() => loaded = SaveSystem.Load("slot1"), "Vang QuickSaveException op in Load.");
+        Assert.DoesNotThrow(() => loaded = SaveSystem.Load("slot1"), "Catch QuickSaveException in Load.");
 
         Assert.IsNull(loaded);
         Assert.AreEqual(2, SaveSystem.Load("slot2").Player.Coins);
@@ -604,24 +604,24 @@ public class Step5_DamagedFileTests : PersistenceTestBase
     public void Save_ReturnsFalseOnDamagedFile()
     {
         LogAssert.ignoreFailingMessages = true;
-        WriteFile(SlotFile("slot1"), "{ dit is geen geldige json");
+        WriteFile(SlotFile("slot1"), "{ this is not valid json");
 
         bool saved = true;
-        Assert.DoesNotThrow(() => saved = SaveSystem.Save("slot1", FullGame()), "Vang QuickSaveException op in Save.");
+        Assert.DoesNotThrow(() => saved = SaveSystem.Save("slot1", FullGame()), "Catch QuickSaveException in Save.");
 
-        Assert.IsFalse(saved, "QuickSaveWriter.Create kan een kapot bestand niet openen, dus Save hoort false terug te geven.");
+        Assert.IsFalse(saved, "QuickSaveWriter.Create cannot open a damaged file, so Save should return false.");
     }
 
     [Test]
     public void Delete_RemovesDamagedFile()
     {
         LogAssert.ignoreFailingMessages = true;
-        WriteFile(SlotFile("slot1"), "{ dit is geen geldige json");
+        WriteFile(SlotFile("slot1"), "{ this is not valid json");
 
         SaveSystem.Delete("slot1");
 
         Assert.IsFalse(SaveSystem.Exists("slot1"));
-        Assert.IsTrue(SaveSystem.Save("slot1", FullGame()), "Na het wissen hoort het slot weer bruikbaar te zijn.");
+        Assert.IsTrue(SaveSystem.Save("slot1", FullGame()), "The slot should be usable again after deleting.");
     }
 
     [Test]
@@ -631,7 +631,7 @@ public class Step5_DamagedFileTests : PersistenceTestBase
         SaveSystem.Save("slot1", FullGame());
         Thread.Sleep(20);
         SaveSystem.Save("slot2", FullGame());
-        WriteFile(SlotFile("slot2"), "{ dit is geen geldige json");
+        WriteFile(SlotFile("slot2"), "{ this is not valid json");
 
         Assert.AreEqual("slot1", GameSession.MostRecentSlot());
     }
@@ -647,7 +647,7 @@ public class Step6_ExtraEncryptionTests : PersistenceTestBase
         SaveSystem.Save("slot1", FullGame());
 
         StringAssert.DoesNotContain("Noor", File.ReadAllText(SlotFile("slot1")),
-            "De spelernaam staat leesbaar in het bestand. Zet SecurityMode op Aes en geef een Password mee.");
+            "The player name is readable in the file. Set SecurityMode to Aes and provide a Password.");
     }
 
     [Test]
@@ -657,6 +657,6 @@ public class Step6_ExtraEncryptionTests : PersistenceTestBase
 
         Assert.AreEqual("Noor", loaded.Player.Name);
         Assert.AreEqual("Noor", SaveSystem.ReadSummary("slot1").PlayerName,
-            "Gebruik dezelfde QuickSaveSettings in Save, Load en ReadSummary.");
+            "Use the same QuickSaveSettings in Save, Load and ReadSummary.");
     }
 }
