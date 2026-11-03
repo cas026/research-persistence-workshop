@@ -1,0 +1,162 @@
+.hidden {
+    display: none;
+}
+
+.screen {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    align-items: center;
+    justify-content: center;
+}
+
+.screen--dim {
+    background-color: rgba(10, 13, 20, 0.75);
+}
+
+.panel {
+    width: 560px;
+    padding: 24px;
+    background-color: rgb(35, 42, 56);
+    border-radius: 10px;
+    border-width: 2px;
+    border-color: rgb(70, 85, 115);
+}
+
+.title {
+    font-size: 30px;
+    -unity-font-style: bold;
+    color: white;
+    margin-bottom: 16px;
+    -unity-text-align: middle-center;
+}
+
+.panel Label {
+    color: rgb(215, 222, 235);
+}
+
+.panel .title {
+    color: white;
+}
+
+.message {
+    margin-top: 10px;
+    color: rgb(160, 175, 200);
+    white-space: normal;
+    -unity-text-align: middle-center;
+}
+
+Button {
+    height: 40px;
+    margin: 4px 0;
+    font-size: 16px;
+    color: white;
+    background-color: rgb(56, 100, 180);
+    border-radius: 6px;
+    border-width: 0;
+}
+
+Button:hover {
+    background-color: rgb(76, 124, 210);
+}
+
+Button:disabled {
+    opacity: 0.4;
+}
+
+.danger {
+    background-color: rgb(170, 55, 55);
+}
+
+.danger:hover {
+    background-color: rgb(200, 70, 70);
+}
+
+.slot-list {
+    max-height: 440px;
+    margin-bottom: 8px;
+}
+
+.slot-row {
+    flex-direction: row;
+    align-items: center;
+    padding: 8px;
+    margin-bottom: 6px;
+    background-color: rgb(46, 54, 71);
+    border-radius: 6px;
+}
+
+.slot-row Button {
+    width: 76px;
+    margin-left: 6px;
+}
+
+.slot-text {
+    flex-grow: 1;
+    flex-shrink: 1;
+}
+
+.slot-title {
+    -unity-font-style: bold;
+    font-size: 16px;
+}
+
+.hud-stats {
+    position: absolute;
+    left: 16px;
+    top: 16px;
+    width: 300px;
+    padding: 12px;
+    background-color: rgba(15, 19, 28, 0.8);
+    border-radius: 8px;
+}
+
+.hud-stats Label {
+    color: white;
+    font-size: 16px;
+}
+
+.hud-name {
+    -unity-font-style: bold;
+}
+
+.health-track {
+    height: 14px;
+    margin: 6px 0;
+    background-color: rgb(70, 30, 30);
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.health-fill {
+    height: 100%;
+    width: 100%;
+    background-color: rgb(70, 190, 90);
+}
+
+.hud-hint {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 14px;
+    color: white;
+    font-size: 15px;
+    -unity-text-align: middle-center;
+}
+
+.hud-message {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 28px;
+    color: rgb(255, 225, 120);
+    font-size: 22px;
+    -unity-font-style: bold;
+    -unity-text-align: middle-center;
+}
+
+.screen--menu {
+    background-color: rgb(18, 22, 31);
+}

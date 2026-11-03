@@ -1,0 +1,32 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" editor-extension-mode="False">
+    <Style src="Workshop.uss" />
+
+    <ui:VisualElement class="hud-stats" picking-mode="Ignore">
+        <ui:Label name="NameLabel" class="hud-name" />
+        <ui:VisualElement class="health-track">
+            <ui:VisualElement name="HealthFill" class="health-fill" />
+        </ui:VisualElement>
+        <ui:Label name="CoinsLabel" />
+        <ui:Label name="InventoryLabel" />
+    </ui:VisualElement>
+
+    <ui:Label text="WASD lopen   |   F5 quicksave   |   F9 quickload   |   Esc menu" class="hud-hint" picking-mode="Ignore" />
+    <ui:Label name="MessageLabel" class="hud-message hidden" picking-mode="Ignore" />
+
+    <ui:VisualElement name="PausePanel" class="screen screen--dim hidden">
+        <ui:VisualElement class="panel">
+            <ui:VisualElement name="PauseButtons">
+                <ui:Label text="Pauze" class="title" />
+                <ui:Button name="ResumeButton" text="Verder" />
+                <ui:Button name="SaveButton" text="Opslaan" />
+                <ui:Button name="LoadButton" text="Laden" />
+                <ui:Button name="MenuButton" text="Naar hoofdmenu" />
+            </ui:VisualElement>
+            <ui:VisualElement name="SlotPanel" class="hidden">
+                <ui:Label name="SlotTitle" class="title" />
+                <ui:ScrollView name="SlotList" class="slot-list" />
+                <ui:Button name="SlotBackButton" text="Terug" />
+            </ui:VisualElement>
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

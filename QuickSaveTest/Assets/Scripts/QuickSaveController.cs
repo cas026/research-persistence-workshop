@@ -1,114 +1,86 @@
 using UnityEngine;
 using UnityEngine.UIElements;
-using UnityEngine.SceneManagement;
-using CI.QuickSave;
 
+[RequireComponent(typeof(UIDocument))]
 public class QuickSaveController : MonoBehaviour
 {
-    private TextField playerNameInput;
-    private TextField ageInput;
-    private Toggle soundToggle;
-    private Label statusLabel;
+    private VisualElement _mainPanel;
+    private VisualElement _newGamePanel;
+    private VisualElement _loadPanel;
+    private Button _continueButton;
+    private Label _messageLabel;
+    private TextField _nameInput;
+    private SlotListView _slotList;
 
-    private string saveRootName = "DemoSave";
-
-    void OnEnable()
+    private void OnEnable()
     {
-        Invoke(nameof(BindUI), 0.1f);
+        VisualElement root = GetComponent<UIDocument>().rootVisualElement;
+
+        _mainPanel = root.Q("MainPanel");
+        _newGamePanel = root.Q("NewGamePanel");
+        _loadPanel = root.Q("LoadPanel");
+        _continueButton = root.Q<Button>("ContinueButton");
+        _messageLabel = root.Q<Label>("MessageLabel");
+        _nameInput = root.Q<TextField>("NameInput");
+        _slotList = new SlotListView(root.Q("SlotList"));
+
+        _continueButton.clicked += Continue;
+        root.Q<Button>("NewGameButton").clicked += OpenNewGame;
+        root.Q<Button>("LoadButton").clicked += OpenLoad;
+        root.Q<Button>("QuitButton").clicked += Application.Quit;
+        root.Q<Button>("StartButton").clicked += StartNewGame;
+        root.Q<Button>("NewGameBackButton").clicked += ShowMain;
+        root.Q<Button>("LoadBackButton").clicked += ShowMain;
+
+        ShowMain();
+        _messageLabel.text = GameSession.PendingMessage ?? string.Empty;
+        GameSession.PendingMessage = null;
     }
 
-    void BindUI()
+    private void ShowMain()
     {
-        UIDocument uiDoc = GetComponent<UIDocument>();
-        if (uiDoc == null || uiDoc.rootVisualElement == null) return;
-
-        var root = uiDoc.rootVisualElement;
-
-        playerNameInput = root.Q<TextField>("PlayerNameInput");
-        ageInput = root.Q<TextField>("AgeInput"); // Veranderd!
-        soundToggle = root.Q<Toggle>("SoundToggle");
-        statusLabel = root.Q<Label>("StatusLabel");
-
-        root.Q<Button>("SaveButton")?.RegisterCallback<ClickEvent>(ev => Save());
-        root.Q<Button>("LoadButton")?.RegisterCallback<ClickEvent>(ev => Load());
-        root.Q<Button>("ClearButton")?.RegisterCallback<ClickEvent>(ev => ClearData());
-        root.Q<Button>("StartButton")?.RegisterCallback<ClickEvent>(ev => StartGame());
-
-        Load();
+        ShowOnly(_mainPanel);
+        _messageLabel.text = string.Empty;
+        _continueButton.SetEnabled(GameSession.MostRecentSlot() != null);
     }
 
-    public void Save()
+    private void ShowOnly(VisualElement panel)
     {
-        try
-        {
-            int ageVal = 0;
-            int.TryParse(ageInput != null ? ageInput.value : "0", out ageVal);
-
-            QuickSaveWriter.Create(saveRootName)
-                           .Write("PlayerName", playerNameInput != null ? playerNameInput.value : "Speler1")
-                           .Write("Age", ageVal) 
-                           .Write("SoundEnabled", soundToggle != null ? soundToggle.value : true)
-                           .Commit();
-
-            if (statusLabel != null) statusLabel.text = "Profiel opgeslagen! (Naam, Leeftijd, Geluid)";
-        }
-        catch (System.Exception e)
-        {
-            if (statusLabel != null) statusLabel.text = "Fout bij opslaan!";
-            Debug.LogError(e.Message);
-        }
+        _mainPanel.EnableInClassList("hidden", panel != _mainPanel);
+        _newGamePanel.EnableInClassList("hidden", panel != _newGamePanel);
+        _loadPanel.EnableInClassList("hidden", panel != _loadPanel);
     }
 
-    public void Load()
+    private void Continue()
     {
-        try
-        {
-            if (QuickSaveWriter.RootExists(saveRootName))
-            {
-                QuickSaveReader.Create(saveRootName)
-                               .Read<string>("PlayerName", (r) => { if (playerNameInput != null) playerNameInput.value = r; })
-                               .Read<int>("Age", (r) => { if (ageInput != null) ageInput.value = r.ToString(); }) 
-                               .Read<bool>("SoundEnabled", (r) => { if (soundToggle != null) soundToggle.value = r; });
-
-                if (statusLabel != null) statusLabel.text = "Profiel succesvol geladen";
-            }
-            else
-            {
-                if (statusLabel != null) statusLabel.text = "Geen savebestand gevonden.";
-            }
-        }
-        catch (System.Exception e)
-        {
-            if (statusLabel != null) statusLabel.text = "Fout bij inlezen.";
-            Debug.LogError(e.Message);
-        }
+        LoadSlot(GameSession.MostRecentSlot());
     }
 
-    private void ClearData()
+    private void OpenNewGame()
     {
-        try
-        {
-            if (QuickSaveWriter.RootExists(saveRootName))
-            {
-                QuickSaveWriter.DeleteRoot(saveRootName);
-            }
-
-            if (playerNameInput != null) playerNameInput.value = "";
-            if (ageInput != null) ageInput.value = ""; 
-            if (soundToggle != null) soundToggle.value = false;
-
-            if (statusLabel != null) statusLabel.text = "Savebestand en velden volledig gewist.";
-        }
-        catch (System.Exception e)
-        {
-            Debug.LogError(e.Message);
-            if (statusLabel != null) statusLabel.text = "Fout bij wissen van data.";
-        }
+        _nameInput.value = GameSession.Settings.PlayerName;
+        ShowOnly(_newGamePanel);
     }
 
-    public void StartGame()
+    private void StartNewGame()
     {
-        Save();
-        SceneManager.LoadScene("game");
+        GameSession.Settings.PlayerName = _nameInput.value;
+        GameSession.SaveSettings();
+        GameSession.NewGame(_nameInput.value);
+    }
+
+    private void OpenLoad()
+    {
+        _slotList.Show(SaveSlots.All, "Laden", false, LoadSlot);
+        ShowOnly(_loadPanel);
+    }
+
+    private void LoadSlot(string slot)
+    {
+        if (!GameSession.Load(slot))
+        {
+            ShowMain();
+            _messageLabel.text = $"{SaveSlots.DisplayName(slot)} kon niet worden geladen";
+        }
     }
 }
