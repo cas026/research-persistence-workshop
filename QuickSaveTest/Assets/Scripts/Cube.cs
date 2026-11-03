@@ -17,7 +17,7 @@ public class Cube : MonoBehaviour
         QuickSaveWriter.Create(saveName)
             .Write("MyPosition", transform.position)
             
-            // De JSON format: { "x": 1.5, "y": 0.0, "z": -2.3 }
+            // The JSON format: { "x": 1.5, "y": 0.0, "z": -2.3 }
             .Commit();
                            
         Debug.Log("<color=green>Position saved</color>");

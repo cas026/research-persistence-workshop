@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class GameSettings
 {
-    public string PlayerName = "Speler";
+    public string PlayerName = "Player";
 }
 
 public static class SettingsStore

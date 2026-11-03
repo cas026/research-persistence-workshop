@@ -10,22 +10,22 @@
         <ui:Label name="InventoryLabel" />
     </ui:VisualElement>
 
-    <ui:Label text="WASD lopen   |   F5 quicksave   |   F9 quickload   |   Esc menu" class="hud-hint" picking-mode="Ignore" />
+    <ui:Label text="WASD move   |   F5 quicksave   |   F9 quickload   |   Esc menu" class="hud-hint" picking-mode="Ignore" />
     <ui:Label name="MessageLabel" class="hud-message hidden" picking-mode="Ignore" />
 
     <ui:VisualElement name="PausePanel" class="screen screen--dim hidden">
         <ui:VisualElement class="panel">
             <ui:VisualElement name="PauseButtons">
-                <ui:Label text="Pauze" class="title" />
-                <ui:Button name="ResumeButton" text="Verder" />
-                <ui:Button name="SaveButton" text="Opslaan" />
-                <ui:Button name="LoadButton" text="Laden" />
-                <ui:Button name="MenuButton" text="Naar hoofdmenu" />
+                <ui:Label text="Paused" class="title" />
+                <ui:Button name="ResumeButton" text="Resume" />
+                <ui:Button name="SaveButton" text="Save" />
+                <ui:Button name="LoadButton" text="Load" />
+                <ui:Button name="MenuButton" text="Main Menu" />
             </ui:VisualElement>
             <ui:VisualElement name="SlotPanel" class="hidden">
                 <ui:Label name="SlotTitle" class="title" />
                 <ui:ScrollView name="SlotList" class="slot-list" />
-                <ui:Button name="SlotBackButton" text="Terug" />
+                <ui:Button name="SlotBackButton" text="Back" />
             </ui:VisualElement>
         </ui:VisualElement>
     </ui:VisualElement>

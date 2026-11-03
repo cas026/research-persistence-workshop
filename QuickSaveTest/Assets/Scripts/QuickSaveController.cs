@@ -71,7 +71,7 @@ public class QuickSaveController : MonoBehaviour
 
     private void OpenLoad()
     {
-        _slotList.Show(SaveSlots.All, "Laden", false, LoadSlot);
+        _slotList.Show(SaveSlots.All, "Load", false, LoadSlot);
         ShowOnly(_loadPanel);
     }
 
@@ -80,7 +80,7 @@ public class QuickSaveController : MonoBehaviour
         if (!GameSession.Load(slot))
         {
             ShowMain();
-            _messageLabel.text = $"{SaveSlots.DisplayName(slot)} kon niet worden geladen";
+            _messageLabel.text = $"{SaveSlots.DisplayName(slot)} could not be loaded";
         }
     }
 }

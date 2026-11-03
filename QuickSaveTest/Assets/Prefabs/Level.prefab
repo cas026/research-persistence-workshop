@@ -237,7 +237,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9305889d19b231243af07d9a0e1091b2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Door
-  requiredItem: Sleutel
+  requiredItem: Key
   interactDistance: 3.5
 --- !u!1 &962564456648912426
 GameObject:
@@ -716,7 +716,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Pickup
   coins: 0
-  itemName: Edelsteen
+  itemName: Gem
 --- !u!1 &2369752671385072950
 GameObject:
   m_ObjectHideFlags: 0
@@ -2356,4 +2356,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Pickup
   coins: 0
-  itemName: Sleutel
+  itemName: Key
