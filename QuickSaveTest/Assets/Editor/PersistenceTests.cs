@@ -637,9 +637,9 @@ public class Step5_DamagedFileTests : PersistenceTestBase
     }
 }
 
-[Explicit("Bonusopdracht: AES")]
-[Category("Bonus")]
-public class Step6_BonusEncryptionTests : PersistenceTestBase
+[Explicit("Extra: AES")]
+[Category("Extra")]
+public class Step6_ExtraEncryptionTests : PersistenceTestBase
 {
     [Test]
     public void SaveFile_IsNotReadable()
