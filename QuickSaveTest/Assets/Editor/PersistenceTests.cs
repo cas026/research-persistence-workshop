@@ -628,7 +628,6 @@ public class Step5_DamagedFileTests : PersistenceTestBase
     }
 }
 
-// Faalt tot de bonusopdracht (AES) is gedaan, dus draait alleen als je hem zelf selecteert.
 [Explicit("Bonusopdracht: AES")]
 [Category("Bonus")]
 public class Step6_BonusEncryptionTests : PersistenceTestBase
