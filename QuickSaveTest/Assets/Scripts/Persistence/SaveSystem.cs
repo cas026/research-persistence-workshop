@@ -7,19 +7,19 @@ public static class SaveSystem
     private const string GameKey = "game";
     private const string SummaryKey = "summary";
 
-    private static QuickSaveSettings Settings => new QuickSaveSettings();
+    private static QuickSaveSettings Settings => new QuickSaveSettings { SecurityMode = SecurityMode.None };
+    // private static QuickSaveSettings Settings => new QuickSaveSettings { SecurityMode = SecurityMode.Aes, Password = "abcdef" };
 
     private static string RootFor(string slot) => "save_" + slot;
 
     public static bool Exists(string slot)
     {
-        // TODO 2: geef terug of RootFor(slot) bestaat.
-        return false;
+        return QuickSaveReader.RootExists(RootFor(slot));
     }
 
     public static void Delete(string slot)
     {
-        // TODO 4: verwijder RootFor(slot).
+        QuickSaveWriter.DeleteRoot(RootFor(slot));
     }
 
     public static bool Save(string slot, SaveGame game)
@@ -31,24 +31,50 @@ public static class SaveSystem
             SavedAt = DateTime.Now
         };
 
-        // TODO 2: schrijf game en summary weg in RootFor(slot) met Settings, en geef true terug.
-        // TODO 5: vang QuickSaveException op, log de fout en geef false terug.
+        try {
+            var writer = QuickSaveWriter.Create(RootFor(slot), Settings);
+            writer.Write(GameKey, game);
+            writer.Write(SummaryKey, summary);
+            writer.Commit();
 
-        return false;
+            return true;
+        }
+        catch (QuickSaveException e)
+        {
+            Debug.LogError(e);
+            return false;
+        }
     }
 
     public static SaveGame Load(string slot)
     {
-        // TODO 3: geef null terug als het slot niet bestaat, en lees anders de game uit RootFor(slot) met Settings.
-        // TODO 5: vang QuickSaveException op, log een waarschuwing en geef null terug.
+        if (!Exists(slot)) return null;
+         try {
+            var reader = QuickSaveReader.Create(RootFor(slot), Settings);
+            if (reader.TryRead<SaveGame>(GameKey, out var result)) return result;
+        }
+        catch (QuickSaveException e)
+        {
+            Debug.LogWarning(e);
+            return null;
+        }
 
         return null;
     }
 
     public static SlotSummary ReadSummary(string slot)
     {
-        // TODO 4: geef null terug als het slot niet bestaat, en lees anders de summary met Settings.
-        // TODO 5: vang QuickSaveException op en geef null terug.
+        if (!Exists(slot)) return null;
+
+        try
+        {
+            var reader = QuickSaveReader.Create(RootFor(slot), Settings);
+            if (reader.TryRead<SlotSummary>(SummaryKey, out var result)) return result;
+        }
+        catch (QuickSaveException)
+        {
+            return null;
+        }
 
         return null;
     }
