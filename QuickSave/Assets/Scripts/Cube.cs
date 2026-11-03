@@ -16,11 +16,6 @@ public class Cube : MonoBehaviour
     {
         
         // Use quicksave to save data location position
-        QuickSaveWriter.Create(saveName)
-            .Write("MyPosition", transform.position)
-            
-            // De JSON format: { "x": 1.5, "y": 0.0, "z": -2.3 }
-            .Commit();
                            
     }
 
